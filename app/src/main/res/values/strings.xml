@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">BuyWatermelonDear</string>
+    <string name="head_categories">Product\'s category</string>
+    <string name="shopping_cart">Shopping Cart</string>
+    <string name="about">About</string>
+    <string name="already_in_cart">Delete from shopping cart</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="buy">Buy</string>
+    <string name="home">Home</string>
+    <string name="early_watched">Early Watched:</string>
+    <string name="next">Next</string>
+</resources>
