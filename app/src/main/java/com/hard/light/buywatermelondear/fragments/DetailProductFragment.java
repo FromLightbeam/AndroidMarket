@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -16,6 +18,7 @@ import android.widget.TextView;
 import com.hard.light.buywatermelondear.R;
 import com.hard.light.buywatermelondear.activity.ShoppingCartActivity;
 import com.hard.light.buywatermelondear.helper.DownloadImagesTask;
+import com.hard.light.buywatermelondear.helper.TouchImageView;
 import com.hard.light.buywatermelondear.models.Category;
 import com.hard.light.buywatermelondear.models.History;
 import com.hard.light.buywatermelondear.models.Product;
@@ -46,7 +49,9 @@ public class DetailProductFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_detail_product, container, false);
 
         nameView = view.findViewById(R.id.name);
-        imageView = view.findViewById(R.id.image);
+
+        imageView = (ImageView) view.findViewById(R.id.image);
+
         priceView = view.findViewById(R.id.price);
         descriptionView = view.findViewById(R.id.description);
         buyButton = view.findViewById(R.id.buy_button);
@@ -66,13 +71,43 @@ public class DetailProductFragment extends Fragment {
             }
         });
 
-        nextButton.setOnClickListener(new View.OnClickListener() {
+        nextButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View view) {
-                if (products != null)
-                    setProduct(nextProduct(products, product));
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                float x = motionEvent.getX();
+                float y = motionEvent.getY();
+                String sDown = "";
+                String sMove = "";
+                String sUp = "";
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_DOWN: // нажатие
+                        sDown = "Down: " + x + "," + y;
+                        sMove = ""; sUp = "";
+                        break;
+                    case MotionEvent.ACTION_MOVE: // движение
+                        sMove = "Move: " + x + "," + y;
+                        break;
+                    case MotionEvent.ACTION_UP: // отпускание
+                    case MotionEvent.ACTION_CANCEL:
+                        sMove = "";
+                        sUp = "Up: " + x + "," + y;
+                        if (products != null)
+                            setProduct(nextProduct(products, product));
+                        break;
+                }
+                Log.d("TouchLog", sDown + "\n" + sMove + "\n" + sUp);
+                return true;
             }
-            });
+        });
+
+
+//        (new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (products != null)
+//                    setProduct(nextProduct(products, product));
+//            }
+//            });
 
         return view;
     }

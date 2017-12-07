@@ -1,8 +1,10 @@
 package com.hard.light.buywatermelondear;
 
 import android.app.Activity;
+import android.app.VoiceInteractor;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -20,8 +22,12 @@ import android.widget.Toast;
 import com.hard.light.buywatermelondear.activity.BaseActivity;
 import com.hard.light.buywatermelondear.activity.CategoryActivity;
 import com.hard.light.buywatermelondear.models.Category;
+//import com.android.volley.Request;
 import com.hard.light.buywatermelondear.models.Product;
 import android.widget.AdapterView.OnItemClickListener;
+
+import org.json.JSONObject;
+
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -45,11 +51,13 @@ public class MainActivity extends BaseActivity {
         ArrayAdapter<Category> adapter = new ArrayAdapter<Category>(this,
                 android.R.layout.simple_list_item_1, this.categories);
 
+        final MediaPlayer mp = MediaPlayer.create(this, R.raw.clickclack);
+
         categoriesView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 Intent intent = new Intent(MainActivity.this, CategoryActivity.class);
-
+                mp.start();
                 Bundle b = new Bundle();
                 b.putSerializable("category", categories.get(position));
                 intent.putExtras(b);
@@ -58,6 +66,7 @@ public class MainActivity extends BaseActivity {
                 finish();
             }
         });
+
 
         categoriesView.setAdapter(adapter);
     }
@@ -83,6 +92,24 @@ public class MainActivity extends BaseActivity {
 
         categories.add(new Category("Fruits", fruits));
         categories.add(new Category("Shaurmas", shaumas));
+//        String url = "http://localhost:8000/storage/products";
+//
+//        JsonObjectRequst jsObjRequest = new JsonObjectRequest
+//                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+//
+//                    @Override
+//                    public void onResponse(JSONObject response) {
+//                        mTxtDisplay.setText("Response: " + response.toString());
+//                    }
+//                }, new Response.ErrorListener() {
+//
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        // TODO Auto-generated method stub
+//
+//                    }
+//                });
+
 
     }
 

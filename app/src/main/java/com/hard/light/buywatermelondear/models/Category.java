@@ -10,8 +10,12 @@ public class Category implements Serializable {
     private int id;
 
     String name;
-    ArrayList<Product> products;
+    ArrayList<Product> products = new ArrayList<>();
 
+    public Category(String name){
+        id = nextId.incrementAndGet();
+        this.name = name;
+    }
 
     public Category(String name, ArrayList<Product> products){
         id = nextId.incrementAndGet();
@@ -30,6 +34,10 @@ public class Category implements Serializable {
 
     public ArrayList<Product> getProducts(){
         return products;
+    }
+
+    public void setProducts(ArrayList<Product> products){
+         this.products = products;
     }
 
     public int getID(){

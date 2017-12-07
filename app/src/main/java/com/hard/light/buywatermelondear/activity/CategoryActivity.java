@@ -57,8 +57,6 @@ public class CategoryActivity extends BaseActivity {
                     detailFragment.setProduct(category.getProducts().get(position));
                     detailFragment.setProducts(category.getProducts());
                 }
-
-
             }
         });
 
