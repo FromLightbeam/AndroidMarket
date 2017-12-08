@@ -4,6 +4,8 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,6 +13,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,6 +26,17 @@
         <activity android:name=".activity.CategoryActivity" />
         <activity android:name=".activity.DetailProductActivity" />
         <activity android:name=".activity.ShoppingCartActivity"></activity>
+        <service
+            android:name=".helper.NotificationService"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="com.hard.light.buywatermelondear.helper.NotificationService" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+
+
     </application>
 
 </manifest>

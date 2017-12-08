@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.hard.light.buywatermelondear.R;
 import com.hard.light.buywatermelondear.fragments.DetailProductFragment;
 import com.hard.light.buywatermelondear.helper.DownloadImagesTask;
+import com.hard.light.buywatermelondear.helper.OnSwipeTouchListener;
 import com.hard.light.buywatermelondear.models.Category;
 import com.hard.light.buywatermelondear.models.Product;
 import com.hard.light.buywatermelondear.models.ShoppingCart;
@@ -36,6 +37,11 @@ public class DetailProductActivity extends BaseActivity {
 
         detailFragment.setProduct(product);
         detailFragment.setProducts(ShoppingCart.getProducts());
+
+
+
+
+
     }
 //
 //    public void clickBuy(View view) {

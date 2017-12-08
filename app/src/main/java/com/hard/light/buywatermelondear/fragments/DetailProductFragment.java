@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.hard.light.buywatermelondear.R;
 import com.hard.light.buywatermelondear.activity.ShoppingCartActivity;
 import com.hard.light.buywatermelondear.helper.DownloadImagesTask;
+import com.hard.light.buywatermelondear.helper.OnSwipeTouchListener;
 import com.hard.light.buywatermelondear.helper.TouchImageView;
 import com.hard.light.buywatermelondear.models.Category;
 import com.hard.light.buywatermelondear.models.History;
@@ -50,7 +51,7 @@ public class DetailProductFragment extends Fragment {
 
         nameView = view.findViewById(R.id.name);
 
-        imageView = (ImageView) view.findViewById(R.id.image);
+        imageView = view.findViewById(R.id.image);
 
         priceView = view.findViewById(R.id.price);
         descriptionView = view.findViewById(R.id.description);
@@ -100,14 +101,17 @@ public class DetailProductFragment extends Fragment {
             }
         });
 
+        imageView.setOnTouchListener(new OnSwipeTouchListener(getContext()) {
+            public void onSwipeRight() {
+//                Toast.makeText(MyActivity.this, "right", Toast.LENGTH_SHORT).show();
+            }
+            public void onSwipeLeft() {
+                if (products != null)
+                    setProduct(nextProduct(products, product));
+//                Toast.makeText(MyActivity.this, "left", Toast.LENGTH_SHORT).show();
+            }
 
-//        (new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (products != null)
-//                    setProduct(nextProduct(products, product));
-//            }
-//            });
+        });
 
         return view;
     }

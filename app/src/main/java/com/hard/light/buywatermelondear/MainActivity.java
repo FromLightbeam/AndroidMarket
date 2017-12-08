@@ -1,6 +1,7 @@
 package com.hard.light.buywatermelondear;
 
 import android.app.Activity;
+import android.app.Notification;
 import android.app.VoiceInteractor;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -19,16 +20,35 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.hard.light.buywatermelondear.activity.BaseActivity;
 import com.hard.light.buywatermelondear.activity.CategoryActivity;
+import com.hard.light.buywatermelondear.helper.NotificationPusher;
+
+import com.hard.light.buywatermelondear.helper.NotificationService;
 import com.hard.light.buywatermelondear.models.Category;
 //import com.android.volley.Request;
 import com.hard.light.buywatermelondear.models.Product;
 import android.widget.AdapterView.OnItemClickListener;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -45,6 +65,10 @@ public class MainActivity extends BaseActivity {
         categories = new ArrayList<>();
 
         initObjects();
+        startService(new Intent(this, NotificationService.class));
+    }
+
+    public void initByData(){
 
         ListView categoriesView = (ListView) findViewById(R.id.categories);
 
@@ -67,48 +91,70 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-
         categoriesView.setAdapter(adapter);
     }
 
 
     // temporarily
     public void initObjects(){
-        Product apple = new Product("apple","https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Red_Apple.jpg/200px-Red_Apple.jpg",new BigDecimal("29"), "Tasty apple. Очень вкусное яблочко дорогой. Купи не пожалешь. Вся семья ест радуется какие вкусные яболчки. Ай объедениеце. Больше бери дорогой. Ай дорогой можешь ещё к брату зайти там от такие арбузы. Я те скидочку сразу выпишу, а дорогой?");
-        Product strawberry = new Product("stawberry","https://smokeit-live.storage.googleapis.com/upload/www.smokeitlondon.com/other/strawberry-10ml-e-juice.jpg", new BigDecimal("9"), "Forests strawberry");
-        Product watermelon = new Product("WaterMelon","https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Watermelon_slices_BNC.jpg/220px-Watermelon_slices_BNC.jpg", new BigDecimal("11"), "Tasty waterMelon");
 
-        Product bigShaurma = new Product("bigShaurma", "http://www.cookforfun.ru/images/shaurma/mainphoto-big.jpg", new BigDecimal("10"), "Big shava");
-        Product smallShaurma = new Product("smallShaurma", "https://www.menu.am/resources/default/img/restaurant_products/big/1449757626,3754.jpeg", new BigDecimal("5"), "Small shava");
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url ="http://10.0.2.2:8000/storage/categories/";
 
-        ArrayList<Product> fruits= new ArrayList<Product>();
-        fruits.add(apple);
-        fruits.add(strawberry);
-        fruits.add(watermelon);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+                Request.Method.GET,
+                url,
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
 
-        ArrayList<Product> shaumas = new ArrayList<Product>();
-        shaumas.add(bigShaurma);
-        shaumas.add(smallShaurma);
+                        try{
+                            // Loop through the array elements
+                            for(int i=0;i<response.length();i++){
+                                // Get current json object
+                                JSONObject category = response.getJSONObject(i);
+                                String name = category.getJSONObject("fields").getString("name");
+                                int id = category.getInt("pk");
+                                categories.add(new Category(name, id));
+                            }
+                            initByData();
+                        }catch (JSONException e){
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener(){
+                    @Override
+                    public void onErrorResponse(VolleyError error){
 
-        categories.add(new Category("Fruits", fruits));
-        categories.add(new Category("Shaurmas", shaumas));
-//        String url = "http://localhost:8000/storage/products";
-//
-//        JsonObjectRequst jsObjRequest = new JsonObjectRequest
-//                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-//
-//                    @Override
-//                    public void onResponse(JSONObject response) {
-//                        mTxtDisplay.setText("Response: " + response.toString());
-//                    }
-//                }, new Response.ErrorListener() {
-//
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        // TODO Auto-generated method stub
-//
-//                    }
-//                });
+                        Product apple = new Product("apple","https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Red_Apple.jpg/200px-Red_Apple.jpg",new BigDecimal("29"), "Tasty apple. Очень вкусное яблочко дорогой. Купи не пожалешь. Вся семья ест радуется какие вкусные яболчки. Ай объедениеце. Больше бери дорогой. Ай дорогой можешь ещё к брату зайти там от такие арбузы. Я те скидочку сразу выпишу, а дорогой?");
+                        Product strawberry = new Product("stawberry","https://smokeit-live.storage.googleapis.com/upload/www.smokeitlondon.com/other/strawberry-10ml-e-juice.jpg", new BigDecimal("9"), "Forests strawberry");
+                        Product watermelon = new Product("WaterMelon","https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Watermelon_slices_BNC.jpg/220px-Watermelon_slices_BNC.jpg", new BigDecimal("11"), "Tasty waterMelon");
+
+                        Product bigShaurma = new Product("bigShaurma", "http://www.cookforfun.ru/images/shaurma/mainphoto-big.jpg", new BigDecimal("10"), "Big shava");
+                        Product smallShaurma = new Product("smallShaurma", "https://www.menu.am/resources/default/img/restaurant_products/big/1449757626,3754.jpeg", new BigDecimal("5"), "Small shava");
+
+                        ArrayList<Product> fruits= new ArrayList<Product>();
+                        fruits.add(apple);
+                        fruits.add(strawberry);
+                        fruits.add(watermelon);
+
+                        ArrayList<Product> shaumas = new ArrayList<Product>();
+                        shaumas.add(bigShaurma);
+                        shaumas.add(smallShaurma);
+
+                        categories.add(new Category("Fruits", fruits));
+                        categories.add(new Category("Shaurmas", shaumas));
+                        initByData();
+                    }
+                }
+        );
+
+            queue.add(jsonArrayRequest);
+
+
+
 
 
     }

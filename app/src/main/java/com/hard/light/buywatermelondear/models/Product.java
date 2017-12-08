@@ -28,6 +28,14 @@ public class Product implements Serializable {
         this.description = description;
     }
 
+    public Product(int id, String name, String url, BigDecimal price, String description ){
+        this.id = id;
+        this.name = name;
+        this.pictureURL = url;
+        this.price = price.setScale(2, RoundingMode.HALF_EVEN);;
+        this.description = description;
+    }
+
     public String getName(){
         return name;
     }
