@@ -51,7 +51,8 @@ public class PriceListAdapter extends BaseAdapter {
         }
 //
         String[] p = getProduct(position);
-        ((TextView) view.findViewById(R.id.category_name)).setText(p[2]);
+
+        ((TextView) view.findViewById(R.id.category_name)).setText(p[2] + ", ");
         ((TextView) view.findViewById(R.id.product_name)).setText(p[1]+ ", ");
 
         ImageView image = ((ImageView) view.findViewById(R.id.product_image));

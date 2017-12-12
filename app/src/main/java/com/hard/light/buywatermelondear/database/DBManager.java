@@ -111,7 +111,7 @@ public class DBManager {
                 + " = " + dbHelper.TABLE_CATEGORY + "." + dbHelper.KEY_CATEGORY_ID;
         String columns[] = { dbHelper.TABLE_NAME + "." + dbHelper.KEY_PICUREURL,
                              dbHelper.TABLE_NAME + "." + dbHelper.KEY_NAME,
-                             dbHelper.TABLE_CATEGORY + "." + dbHelper.KEY_CATEGORY_NAME};
+                             dbHelper.TABLE_CATEGORY + "." + dbHelper.KEY_CATEGORY_NAME };
         Cursor cursor = database.query(table, columns, null, null, null, null, null);
         if (cursor.moveToFirst()) {
             int pictureURLColumn = cursor.getColumnIndex(dbHelper.KEY_PICUREURL);
