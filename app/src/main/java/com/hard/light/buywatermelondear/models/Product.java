@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Pattern;
 
 
 public class Product implements Serializable {
@@ -19,21 +20,37 @@ public class Product implements Serializable {
     String pictureURL;
     BigDecimal price;
     String description;
+    int category_id;
+    int count = 1;
 
-    public Product(String name, String url, BigDecimal price, String description ){
+    public Product(String name, String url, BigDecimal price, String description, int category_id ){
         id = nextId.incrementAndGet();
         this.name = name;
         this.pictureURL = url;
         this.price = price.setScale(2, RoundingMode.HALF_EVEN);;
         this.description = description;
+        this.category_id = category_id;
     }
 
-    public Product(int id, String name, String url, BigDecimal price, String description ){
+    public Product(int id, String name, String url, BigDecimal price, String description, int category_id ){
         this.id = id;
         this.name = name;
         this.pictureURL = url;
         this.price = price.setScale(2, RoundingMode.HALF_EVEN);;
         this.description = description;
+        this.category_id = category_id;
+    }
+
+    public Product(int id, String name, String url, String price, String description, int count, int category_id ){
+        this.id = id;
+        this.name = name;
+        this.pictureURL = url;
+        String value = price.split(Pattern.quote("$"))[0];
+        BigDecimal decvalue = new BigDecimal(value);
+        this.price = decvalue.setScale(2, RoundingMode.HALF_EVEN);;
+        this.description = description;
+        this.count = count;
+        this.category_id = category_id;
     }
 
     public String getName(){
@@ -73,5 +90,17 @@ public class Product implements Serializable {
         }
 
         return retVal;
+    }
+
+    public int getCount(){
+        return this.count;
+    }
+
+    public void setCount(int count){
+        this.count = count;
+    }
+
+    public int getCategoryId(){
+        return category_id;
     }
 }

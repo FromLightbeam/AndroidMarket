@@ -28,9 +28,7 @@ public class Category implements Serializable {
         this.products = products;
     }
 
-    String getName(){
-        return name;
-    }
+
 
     @Override
     public String toString(){
@@ -49,4 +47,7 @@ public class Category implements Serializable {
         return id;
     }
 
+    public String getName(){
+        return this.name;
+    }
 }

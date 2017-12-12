@@ -3,6 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <!-- "Mark Favorite", should appear as action button if possible -->
 
+
+
     <item
         android:id="@+id/action_home"
         android:icon="@drawable/ic_home_white_24dp"
@@ -14,6 +16,12 @@
         android:icon="@drawable/ic_add_shopping_cart_white_24dp"
         android:title="@string/shopping_cart"
         app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/action_price_list"
+        android:icon="@drawable/ic_description_white_24dp"
+        android:title="@string/price_list"
+        app:showAsAction="ifRoom"/>
+
 
     <!-- Settings, should always be in the overflow -->
     <item android:id="@+id/action_settings"

@@ -11,4 +11,7 @@
     <string name="home">Home</string>
     <string name="early_watched">Early Watched:</string>
     <string name="next">Next</string>
+    <string name="plus">+</string>
+    <string name="minus">-</string>
+    <string name="price_list">price list</string>
 </resources>

@@ -2,9 +2,9 @@ package com.hard.light.buywatermelondear.models;
 
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ShoppingCart {
+
     static ArrayList<Product> products  = new ArrayList<>();
 
     public static void add(Product p){
@@ -14,4 +14,14 @@ public class ShoppingCart {
     public static ArrayList<Product> getProducts(){
         return products;
     }
+
+    public static void setProducts(ArrayList<Product> ps){
+        products = ps;
+    }
+
+    public static void delete(Product p){
+        products.remove(p);
+    }
+
+
 }

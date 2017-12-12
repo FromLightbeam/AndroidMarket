@@ -1,9 +1,11 @@
 package com.hard.light.buywatermelondear.helper;
 
+import com.hard.light.buywatermelondear.R;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.ImageView;
 
 import java.io.InputStream;
@@ -32,12 +34,19 @@ public class DownloadImagesTask extends AsyncTask<ImageView, Void, Bitmap> {
         try{
             URL ulrn = new URL(url);
             HttpURLConnection con = (HttpURLConnection)ulrn.openConnection();
+            con.setConnectTimeout(15000);
+            con.setReadTimeout(15000);
             InputStream is = con.getInputStream();
             bmp = BitmapFactory.decodeStream(is);
+
             if (null != bmp)
                 return bmp;
 
-        }catch(Exception e){}
+        }catch(Exception e){
+            imageView.setImageResource(R.drawable.error);
+
+        }
+
         return bmp;
     }
 }

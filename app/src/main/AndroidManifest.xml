@@ -25,6 +25,7 @@
         </activity>
         <activity android:name=".activity.CategoryActivity" />
         <activity android:name=".activity.DetailProductActivity" />
+        <activity android:name=".activity.PriceListActivity" />
         <activity android:name=".activity.ShoppingCartActivity"></activity>
         <service
             android:name=".helper.NotificationService"

@@ -1,8 +1,6 @@
 package com.hard.light.buywatermelondear.fragments;
 
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -16,16 +14,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hard.light.buywatermelondear.R;
-import com.hard.light.buywatermelondear.activity.ShoppingCartActivity;
+import com.hard.light.buywatermelondear.database.DBHelper;
+import com.hard.light.buywatermelondear.database.DBManager;
 import com.hard.light.buywatermelondear.helper.DownloadImagesTask;
 import com.hard.light.buywatermelondear.helper.OnSwipeTouchListener;
-import com.hard.light.buywatermelondear.helper.TouchImageView;
-import com.hard.light.buywatermelondear.models.Category;
 import com.hard.light.buywatermelondear.models.History;
 import com.hard.light.buywatermelondear.models.Product;
 import com.hard.light.buywatermelondear.models.ShoppingCart;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 
 
@@ -35,42 +31,90 @@ public class DetailProductFragment extends Fragment {
     }
 
     TextView nameView;
+    TextView countView;
     ImageView imageView;
     TextView priceView;
     TextView descriptionView;
     Button buyButton;
     Button nextButton;
+    Button plusButton;
+    Button minusButton;
     View view;
     Product product;
     ArrayList<Product> products;
 
+    DBManager dbManager;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_detail_product, container, false);
 
         nameView = view.findViewById(R.id.name);
-
+        countView = view.findViewById(R.id.count);
         imageView = view.findViewById(R.id.image);
 
         priceView = view.findViewById(R.id.price);
         descriptionView = view.findViewById(R.id.description);
         buyButton = view.findViewById(R.id.buy_button);
         nextButton = view.findViewById(R.id.next_button);
+        plusButton = view.findViewById(R.id.inc_count_button);
+        minusButton = view.findViewById(R.id.dec_count_button);
 
+        dbManager = new DBManager(getContext().getApplicationContext());
+
+
+//
         buyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!(ShoppingCart.getProducts().contains(product))) {
-                    ShoppingCart.add(product);
+
+                if (!(dbManager.getProducts().contains(product))) {
+                    dbManager.addProduct(product);
+                    ShoppingCart.setProducts(dbManager.getProducts());
                     buyButton.setText(getString(R.string.already_in_cart));
                 }
                 else{
-                    ShoppingCart.getProducts().remove(product);
+                    dbManager.deleteProduct(product);
+                    ShoppingCart.setProducts(dbManager.getProducts());
                     buyButton.setText(getString(R.string.buy));
+                }
+
+            }
+        });
+//
+        plusButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (product != null) {
+                    int count = product.getCount();
+                    count++;
+                    countView.setText(String.valueOf(count));
+                    product.setCount(count);
+
+                    dbManager.updateProduct(product);
+
                 }
             }
         });
+
+        minusButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (product != null) {
+                    int count = product.getCount();
+                    if (count > 1) {
+                        count--;
+                        countView.setText(String.valueOf(count));
+                        product.setCount(count);
+
+                        dbManager.updateProduct(product);
+
+                    }
+                }
+            }
+        });
+
+
 
         nextButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -103,12 +147,10 @@ public class DetailProductFragment extends Fragment {
 
         imageView.setOnTouchListener(new OnSwipeTouchListener(getContext()) {
             public void onSwipeRight() {
-//                Toast.makeText(MyActivity.this, "right", Toast.LENGTH_SHORT).show();
             }
             public void onSwipeLeft() {
                 if (products != null)
                     setProduct(nextProduct(products, product));
-//                Toast.makeText(MyActivity.this, "left", Toast.LENGTH_SHORT).show();
             }
 
         });
@@ -130,11 +172,15 @@ public class DetailProductFragment extends Fragment {
 
     public void setProduct(Product p){
         product = p;
+
         History.add(product);
         imageView.setTag(product.getPictureURL());
 
-        new DownloadImagesTask().execute(imageView);
+        DownloadImagesTask task = new DownloadImagesTask();
+        task.execute(imageView);
+
         nameView.setText(product.getName());
+        countView.setText(String.valueOf(product.getCount()));
         priceView.setText(product.getPrice());
         descriptionView.setText(product.getDescription());
 

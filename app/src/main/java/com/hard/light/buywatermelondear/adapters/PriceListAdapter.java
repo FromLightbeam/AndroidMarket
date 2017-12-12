@@ -1,6 +1,5 @@
 package com.hard.light.buywatermelondear.adapters;
 
-import java.util.ArrayList;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,12 +12,16 @@ import com.hard.light.buywatermelondear.R;
 import com.hard.light.buywatermelondear.helper.DownloadImagesTask;
 import com.hard.light.buywatermelondear.models.Product;
 
-public class MyProductListAdapter extends BaseAdapter {
+import java.util.ArrayList;
+
+
+
+public class PriceListAdapter extends BaseAdapter {
     Context ctx;
     LayoutInflater lInflater;
-    ArrayList<Product> objects;
+    ArrayList<String[]> objects;
 
-    public MyProductListAdapter(Context context, ArrayList<Product> products) {
+    public PriceListAdapter(Context context, ArrayList<String[]> products) {
         ctx = context;
         objects = products;
         lInflater = (LayoutInflater) ctx
@@ -44,15 +47,15 @@ public class MyProductListAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
         if (view == null) {
-            view = lInflater.inflate(R.layout.product_item, parent, false);
+            view = lInflater.inflate(R.layout.pricelist_item, parent, false);
         }
 //
-        Product p = getProduct(position);
-//
-        ((TextView) view.findViewById(R.id.product_name)).setText(p.getName() + ", dear");
+        String[] p = getProduct(position);
+        ((TextView) view.findViewById(R.id.category_name)).setText(p[2]);
+        ((TextView) view.findViewById(R.id.product_name)).setText(p[1]+ ", ");
 
         ImageView image = ((ImageView) view.findViewById(R.id.product_image));
-        image.setTag(p.getPictureURL());
+        image.setTag(p[0]);
         new DownloadImagesTask().execute(image);
 
         return view;
@@ -60,9 +63,8 @@ public class MyProductListAdapter extends BaseAdapter {
     }
 
     // товар по позиции
-    Product getProduct(int position) {
-        return ((Product) getItem(position));
+    String[] getProduct(int position) {
+        return ((String[]) getItem(position));
     }
-
 
 }

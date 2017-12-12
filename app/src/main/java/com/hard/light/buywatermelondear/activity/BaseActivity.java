@@ -36,6 +36,12 @@ public class BaseActivity extends AppCompatActivity {
                 alert.show();
                 return true;
 
+            case R.id.action_price_list:
+                Intent intentPrice = new Intent(this, PriceListActivity.class);
+                startActivity(intentPrice);
+                finish();
+                return true;
+
             case R.id.action_shopping_cart:
                 // User chose the "Favorite" action, mark the current item
                 // as a favorite...
@@ -48,6 +54,7 @@ public class BaseActivity extends AppCompatActivity {
                 Intent intentHome = new Intent(this, MainActivity.class);
                 startActivity(intentHome);
                 finish();
+                return true;
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
